@@ -61,6 +61,7 @@ let metadataBytes = u8aToString(metadataU8a);
       events.forEach(({ phase, event: { data, method, section } }) => {
         console.log(`\t' ${phase}: ${section}.${method}:: ${data}`);
       });
+	  process.exit();
     }
   });
 }
