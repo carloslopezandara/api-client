@@ -3,7 +3,7 @@ const { ApiPromise, WsProvider, Keyring } = require('@polkadot/api');
 
 async function main () {
   // Initialise the provider to connect to the local node
-  const provider = new WsProvider('ws://127.0.0.1:9944');
+  const provider = new WsProvider('wss://node.testnet.fx.land');
 
   // Create the API and wait until ready
   const api = await ApiPromise.create({ provider });
@@ -43,7 +43,7 @@ const lastHeader = await api.rpc.chain.getHeader();
 // Log the information
 console.log(`${chain}: last block #${lastHeader.number} has hash ${lastHeader.hash}`);
 
-let metadata = JSON.parse('{"manifest_metadata": {"job": {"work": "Storage", "engine": "IPFS", "uri": "QmcwQBzZcFVa7gyEQazd9WryzXKVMK2TvwBweruBZhy3pf"}}}');
+let metadata = JSON.parse('{"job": {"work": "Storage", "engine": "IPFS", "uri": "QmcwQBzZcFVa7gyEQazd9WryzXKVMK2TvwBweruBZhy3pf"}}');
 console.log(metadata);
 
   const test = await api.tx.fula
