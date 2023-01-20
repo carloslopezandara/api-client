@@ -1,5 +1,6 @@
 // Required imports
 const { ApiPromise, WsProvider, Keyring } = require('@polkadot/api');
+const { isHex, isU8a, u8aToU8a, stringToU8a, u8aToString } = require('@polkadot/util');
 
 async function main () {
   // Initialise the provider to connect to the local node
@@ -43,11 +44,12 @@ const lastHeader = await api.rpc.chain.getHeader();
 // Log the information
 console.log(`${chain}: last block #${lastHeader.number} has hash ${lastHeader.hash}`);
 
-let metadata = JSON.parse('{"job": {"work": "Storage", "engine": "IPFS", "uri": "QmcwQBzZcFVa7gyEQazd9WryzXKVMK2TvwBweruBZhy3pf"}}');
-console.log(metadata);
+let manifest_metadata = JSON.parse('{"job": {"work": "Storage", "engine": "IPFS", "uri": "bafybeibpkbze56segjvs4qxyntqeykx5ywyqs6kvrqs4ddmikhxx7fxt7i"}}');
+let metadataU8a = stringToU8a(JSON.stringify(manifest_metadata));
+let metadataBytes = u8aToString(metadataU8a);
 
-  const test = await api.tx.fula
-  .uploadManifest(metadata,"QmcwQBzZcFVa7gyEQazd9WryzXKVMK2TvwBweruBZhy3pk", 1,1)
+  await api.tx.fula
+  .uploadManifest(metadataBytes,"bafybeibpkbze56segjvs4qxyntqeykx5ywyqs6kvrqs4ddmikhxx7fxt7i", 1, 3)
   .signAndSend(alice, ({ events = [], status, txHash }) => {
     console.log(`Current status is ${status.type}`);
 
@@ -59,10 +61,8 @@ console.log(metadata);
       events.forEach(({ phase, event: { data, method, section } }) => {
         console.log(`\t' ${phase}: ${section}.${method}:: ${data}`);
       });
-
-      test();
     }
   });
 }
 
-main().catch(console.error).finally(() => process.exit());
+main().catch(console.error);
